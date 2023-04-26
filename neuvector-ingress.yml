@@ -8,6 +8,7 @@ spec:
   stripPrefix:
     prefixes:
       - /api
+      - /fedmanaged
 
 ---
 
@@ -34,6 +35,12 @@ spec:
     services:
       - name: neuvector-service-rest
         port: 10443
+        scheme: https
+  - match: Host(`rajesh-nv.do.support.rancher.space`) && PathPrefix(`/fedmanaged`)
+    kind: Rule
+    services:
+      - name: neuvector-service-controller-fed-master
+        port: 11443
         scheme: https
     middlewares:
       - name: stripprefix
