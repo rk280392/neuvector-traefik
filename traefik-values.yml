@@ -1,0 +1,202 @@
+image:
+  registry: docker.io
+  repository: traefik
+  tag: ""
+  pullPolicy: IfNotPresent
+hub:
+  enabled: false
+deployment:
+  enabled: true
+  kind: Deployment
+  replicas: 1
+  terminationGracePeriodSeconds: 60
+  minReadySeconds: 0
+  annotations: {}
+  labels: {}
+  podAnnotations: {}
+  podLabels: {}
+  additionalContainers: []
+  additionalVolumes: []
+  initContainers: []
+  shareProcessNamespace: false
+  imagePullSecrets: []
+  lifecycle: {}
+podDisruptionBudget:
+  enabled: false
+ingressClass:
+  enabled: true
+  isDefaultClass: true
+experimental:
+  v3:
+    enabled: false
+  plugins:
+    enabled: false
+  kubernetesGateway:
+    enabled: false
+    gateway:
+      enabled: true
+ingressRoute:
+  dashboard:
+    enabled: false
+    annotations: {}
+    labels: {}
+    matchRule: Host(`rajesh-nv.do.support.rancher.space`) 
+    entryPoints: ["traefik"]
+    middlewares: []
+    tls: {}
+updateStrategy:
+  type: RollingUpdate
+  rollingUpdate:
+    maxUnavailable: 0
+    maxSurge: 1
+readinessProbe:
+  failureThreshold: 1
+  initialDelaySeconds: 2
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 2
+livenessProbe:
+  failureThreshold: 3
+  initialDelaySeconds: 2
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 2
+providers:
+  kubernetesCRD:
+    enabled: true
+    allowCrossNamespace: false
+    allowExternalNameServices: false
+    allowEmptyServices: false
+    namespaces: []
+      # - "default"
+  kubernetesIngress:
+    enabled: true
+    allowExternalNameServices: false
+    allowEmptyServices: false
+    namespaces: []
+      # - "default"
+    publishedService:
+      enabled: false
+      # Published Kubernetes Service to copy status from. Format: namespace/servicename
+      # By default this Traefik service
+      # pathOverride: ""
+volumes: []
+additionalVolumeMounts: []
+logs:
+  general:
+    level: DEBUG
+  access:
+    enabled: true
+    filters: {}
+      # statuscodes: "200,300-302"
+      # retryattempts: true
+      # minduration: 10ms
+    fields:
+      general:
+        defaultmode: keep
+        names: {}
+          ## Examples:
+          # ClientUsername: drop
+      headers:
+        defaultmode: drop
+        names: {}
+          ## Examples:
+          # User-Agent: redact
+          # Authorization: drop
+          # Content-Type: keep
+metrics:
+  prometheus:
+    entryPoint: metrics
+tracing: {}
+globalArguments:
+  - "--global.checknewversion"
+  - "--global.sendanonymoususage"
+additionalArguments:
+  - --entryPoints.web.proxyProtocol.insecure
+  - --entryPoints.web.forwardedHeaders.insecure
+  - --serverstransport.insecureskipverify=true
+env: []
+envFrom: []
+ports:
+  traefik:
+    port: 9000
+    expose: false
+    exposedPort: 9000
+    protocol: TCP
+  web:
+    port: 8000
+    expose: true
+    exposedPort: 80
+    protocol: TCP
+  websecure:
+    port: 8443
+    expose: true
+    exposedPort: 443
+    protocol: TCP
+    http3:
+      enabled: false
+    tls:
+      enabled: true
+      # this is the name of a TLSOption definition
+      options: ""
+      certResolver: ""
+      domains: []
+      # - main: example.com
+      #   sans:
+      #     - foo.example.com
+      #     - bar.example.com
+    middlewares: []
+  metrics:
+    port: 9100
+    expose: false
+    exposedPort: 9100
+    protocol: TCP
+tlsOptions: {}
+tlsStore: {}
+service:
+  enabled: true
+  single: true
+  type: LoadBalancer
+  annotations: {}
+  annotationsTCP: {}
+  annotationsUDP: {}
+  labels: {}
+  spec: {}
+  loadBalancerSourceRanges: []
+  externalIPs:
+    - 138.197.56.121
+autoscaling:
+  enabled: false
+persistence:
+  enabled: false
+  name: data
+  accessMode: ReadWriteOnce
+  size: 128Mi
+  path: /data
+  annotations: {}
+certResolvers: {}
+hostNetwork: false
+rbac:
+  enabled: true
+  namespaced: false
+podSecurityPolicy:
+  enabled: false
+serviceAccount:
+  name: ""
+serviceAccountAnnotations: {}
+resources: {}
+affinity: {}
+nodeSelector: {}
+tolerations: []
+topologySpreadConstraints: []
+priorityClassName: ""
+securityContext:
+  capabilities:
+    drop: [ALL]
+  readOnlyRootFilesystem: true
+podSecurityContext:
+  fsGroupChangePolicy: "OnRootMismatch"
+  runAsGroup: 65532
+  runAsNonRoot: true
+  runAsUser: 65532
+extraObjects: []

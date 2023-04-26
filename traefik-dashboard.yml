@@ -1,0 +1,19 @@
+# dashboard.yaml
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  annotations: 
+    cert-manager.io/cluster-issuer: le-traefik
+  name: dashboard
+  namespace: traefik
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`rajesh-nv.do.support.rancher.space`) && (PathPrefix(`/dashboard`) || PathPrefix(`/api`)) 
+      kind: Rule
+      services:
+        - name: api@internal
+          kind: TraefikService
+  tls:
+    secretName: rajesh-nv.do.support.rancher.space-tls

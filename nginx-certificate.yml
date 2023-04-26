@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: rajesh-nv.do.support.rancher.space
+  namespace: test
+spec:
+  secretName: rajesh-nv.do.support.rancher.space-tls
+  issuerRef:
+    name: le-traefik
+    kind: ClusterIssuer
+  commonName: rajesh-nv.do.support.rancher.space
+  dnsNames:
+    - rajesh-nv.do.support.rancher.space

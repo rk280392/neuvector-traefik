@@ -1,0 +1,29 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+ name: le-traefik
+spec:
+ acme:
+   server: https://acme-staging-v02.api.letsencrypt.org/directory
+   privateKeySecretRef:
+     name: le-key-traefik
+   solvers:
+     - http01:
+         ingress:
+           class: traefik
+
+---
+
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: rajesh-nv.do.support.rancher.space
+  namespace: traefik
+spec:
+  secretName: rajesh-nv.do.support.rancher.space-tls
+  issuerRef:
+    name: le-traefik
+    kind: ClusterIssuer
+  commonName: rajesh-nv.do.support.rancher.space
+  dnsNames:
+    - rajesh-nv.do.support.rancher.space

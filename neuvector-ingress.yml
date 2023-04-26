@@ -1,0 +1,33 @@
+#---
+#apiVersion: traefik.containo.us/v1alpha1
+#kind: Middleware
+#metadata:
+#  name: stripprefix
+#  namespace: cattle-neuvector-system
+#spec:
+#  stripPrefix:
+#    prefixes:
+#      - /api
+#
+---
+
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: le-traefik
+  name: neuvector-ingress
+  namespace: cattle-neuvector-system
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`rajesh-nv.do.support.rancher.space`) 
+    kind: Rule
+    services:
+      - name: neuvector-service-webui
+        port: 8443
+        namespace: cattle-neuvector-system
+  tls:
+    secretName: rajesh-nv.do.support.rancher.space-tls
+
