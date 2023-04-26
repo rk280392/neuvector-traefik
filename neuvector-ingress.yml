@@ -1,14 +1,14 @@
-#---
-#apiVersion: traefik.containo.us/v1alpha1
-#kind: Middleware
-#metadata:
-#  name: stripprefix
-#  namespace: cattle-neuvector-system
-#spec:
-#  stripPrefix:
-#    prefixes:
-#      - /api
-#
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: stripprefix
+  namespace: cattle-neuvector-system
+spec:
+  stripPrefix:
+    prefixes:
+      - /api
+
 ---
 
 apiVersion: traefik.containo.us/v1alpha1
@@ -22,12 +22,23 @@ spec:
   entryPoints:
     - websecure
   routes:
-  - match: Host(`rajesh-nv.do.support.rancher.space`) 
+  - match: Host(`rajesh-nv.do.support.rancher.space`)  
     kind: Rule
     services:
       - name: neuvector-service-webui
+        passHostHeader: true
         port: 8443
-        namespace: cattle-neuvector-system
+        scheme: https
+  - match: Host(`rajesh-nv.do.support.rancher.space`) && PathPrefix(`/api`)
+    kind: Rule
+    services:
+      - name: neuvector-service-rest
+        port: 10443
+        scheme: https
+    middlewares:
+      - name: stripprefix
+
+
   tls:
     secretName: rajesh-nv.do.support.rancher.space-tls
 

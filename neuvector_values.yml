@@ -255,7 +255,7 @@ manager:
     hash:
   priorityClassName:
   env:
-    ssl: false
+    ssl: true
   svc:
     type: ClusterIP # should be set to - ClusterIP
     loadBalancerIP:
