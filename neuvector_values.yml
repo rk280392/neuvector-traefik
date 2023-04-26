@@ -53,7 +53,7 @@ controller:
     # key1: value1
     # key2: value2
   apisvc:
-    type:
+    type: ClusterIP
     annotations: {}
     # OpenShift Route configuration
     # Controller supports HTTPS only, so edge termination not supported
@@ -99,7 +99,7 @@ controller:
       caFile: ca.crt # must be the same CA for all internal.
   federation:
     mastersvc:
-      type:
+      type: ClusterIP
       # Federation Master Ingress
       ingress:
         enabled: false
@@ -132,7 +132,7 @@ controller:
           #  -----BEGIN PRIVATE KEY-----
           #  -----END PRIVATE KEY-----
     managedsvc:
-      type:
+      type: ClusterIP
       # Federation Managed Ingress
       ingress:
         enabled: false
